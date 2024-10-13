@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% extends "partitions/base.html" %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- نمایش فرم به صورت پاراگراف -->
+    <button type="submit" class="btn btn-primary">اضافه کردن محصول</button>
+</form>
+{% endblock content %}

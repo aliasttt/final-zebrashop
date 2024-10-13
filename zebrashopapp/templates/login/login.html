@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% extends "partitions/base.html" %}
+
+
+{% block content %}
+
+
+{% if error %}
+        <div class='alert alert-danger alert-dismissible fade show m-3'>
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+            کاربر مورد نظر یافت نشد یا اطلاعات اشتباه است
+        </div>
+    {% endif %}
+
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100"> <!-- تنظیم flex و ارتفاع -->
+    <form class="bg-danger-subtle border rounded d-flex flex-column gap-3 p-4" method="post">
+        {% csrf_token %}
+        <label class="form-label">
+            :شماره همراه
+            <input class="form-control" name='phone' type="text" value='{{request.POST.phone|default_if_none:""}}'>
+        </label>
+        <label class="form-label pb-3">
+            :رمز
+            <input class="form-control" name='password' type="password" value='{{request.POST.password|default_if_none:""}}'>
+        </label>
+        <input class="btn btn-primary" type="submit" value="ارسال"> <!-- تغییر به submit -->
+        <div class='ps-3'>اگر حساب ندارید <a class="link-info text-decoration-none" href="{% url "zebrashopapp:register" %}">کلیک</a> کنید</div>
+    </form>
+</div>
+
+{% endblock content %}
+

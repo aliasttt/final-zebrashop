@@ -1,0 +1,14 @@
+
+
+{
+"disks" : [
+  
+
+    {
+         "name":"media",
+        "mountTo":"media" 
+    }
+]
+,
+"َAPP":"zebrashop"
+}

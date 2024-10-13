@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+{% extends "partitions/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<style>
+    .large-image {
+        width: calc(150px * 4 + 10px * 3);  /* 4 مربع کوچک و 3 فاصله بین آن‌ها */
+        height: calc(150px * 4 + 10px * 3); /* ارتفاع تصویر بزرگ به اندازه ارتفاع مربع‌های کوچک */
+        object-fit: cover; /* اطمینان از اینکه تصویر به‌خوبی درون مربع قرار گیرد */
+    }
+    .small-image {
+        width: 150px;  /* عرض و ارتفاع برابر برای مربع کوچک */
+        height: 150px; /* می‌توانید این مقدار را به دلخواه تغییر دهید */
+        object-fit: cover; /* اطمینان از اینکه تصویر به‌خوبی درون مربع قرار گیرد */
+    }
+    .small-image-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-left: 10px; /* فاصله بین تصویر بزرگ و کوچک */
+    }
+    .flex-container {
+        display: flex;
+        justify-content: center; /* مرکز کردن کل محتوا */
+        align-items: center; /* مرکز کردن عمودی */
+    }
+
+    .carousel-inner {
+        min-height: 430px; /* ارتفاع ثابت برای کاروسل */
+    }
+
+    @media (max-width: 600px) {
+        .large-image {
+            width: 300px;
+            height: 430px; 
+        }
+        .small-image {
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+
+    body {
+        font-family: 'Vazir', sans-serif;
+        direction: ltr;
+        text-align: right;
+        background-color: #f0f0f0; /* پس‌زمینه کل صفحه */
+      }
+      .btn-link {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .btn-link:hover {
+        text-decoration: none;
+      }
+      .card {
+        
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .card-header {
+        
+        color: white; /* رنگ متن هدر کارت */
+      }
+</style>
+{% endblock head %} 
+
+{% block content %}
+<div class="m-5">
+    <div class="flex-container mx-auto">
+        <div class="d-flex justify-content-center align-items-center">
+            <div id='imagecarousel' class='carousel slide' data-ride='carousel'>
+
+                <ol class='carousel-indicators'>
+                    <li data-target='#imagecarousel' data-slide-to='0' class='active'></li>
+                    <li data-target='#imagecarousel' data-slide-to='1'></li>
+                    <li data-target='#imagecarousel' data-slide-to='2'></li>
+                </ol>
+            
+                <div class='carousel-inner'>
+                    <div class='carousel-item active'>
+                        <img class='d-block w-100 large-image' src="{% static 'img/amir1.jpg' %}" alt="Image 1">
+                    </div>
+                    <div class='carousel-item'>
+                        <img class='d-block w-100 large-image' src="{% static 'img/amir2.jpg' %}" alt="Image 2">
+                    </div>
+                    <div class='carousel-item'>
+                        <img class='d-block w-100 large-image' src="{% static 'img/amir3.jpg' %}" alt="Image 3">
+                    </div>
+                </div>
+                
+                <a class="carousel-control-prev" href="#imagecarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">قبلی</span>
+                </a>
+                <a class="carousel-control-next" href="#imagecarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">بعدی</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="small-image-container">
+            <img class="img-fluid small-image mb-2" src="{% static 'img/amir1.jpg' %}" alt="homeimg">
+            <img class="img-fluid small-image mb-2" src="{% static 'img/amir2.jpg' %}" alt="homeimg">
+            <img class="img-fluid small-image mb-2" src="{% static 'img/amir3.jpg' %}" alt="homeimg">
+            <img class="img-fluid small-image mb-2" src="{% static 'img/amir3.jpg' %}" alt="homeimg">
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container mt-5 mb-5">
+    <h2 class="mb-4 text-center">سوالات متداول</h2>
+    <div class="accordion" id="faqAccordion">
+  
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            <button class="btn link-danger" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              سوال ۱: چگونه محصول را سفارش دهم؟
+            </button>
+          </h5>
+        </div>
+  
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#faqAccordion">
+          <div class="card-body">
+            شما می‌توانید محصول مورد نظر را از طریق سایت سفارش دهید و سپس به صفحه پرداخت هدایت خواهید شد.
+          </div>
+        </div>
+      </div>
+  
+      <div class="card mt-3">
+        <div class="card-header" id="headingTwo">
+          <h5 class="mb-0">
+            <button class="btn link-danger collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              سوال ۲: روش‌های پرداخت موجود چیست؟
+            </button>
+          </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#faqAccordion">
+          <div class="card-body">
+            شما می‌توانید از روش‌های مختلف مانند کارت بانکی و PayPal برای پرداخت استفاده کنید.
+          </div>
+        </div>
+      </div>
+  
+      <div class="card mt-3">
+        <div class="card-header" id="headingThree">
+          <h5 class="mb-0">
+            <button class="btn link-danger collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              سوال ۳: چه زمانی محصول به دستم می‌رسد؟
+            </button>
+          </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#faqAccordion">
+          <div class="card-body">
+            زمان تحویل محصول بسته به موقعیت جغرافیایی شما متفاوت است. معمولاً بین ۳ تا ۵ روز کاری طول می‌کشد.
+          </div>
+        </div>
+      </div>
+  
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock content %}

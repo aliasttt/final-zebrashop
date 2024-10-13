@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends "partitions/base.html" %}
+
+{% block content %}
+
+    {% if error %}
+        <div class='alert alert-danger alert-dismissible fade show mt-3 text-center'>
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+            لطفا اطلاعات مورد نظر را به درستی وارد کنید
+        </div>
+    {% endif %}
+
+    <div class='container d-flex justify-content-center align-items-center mx-auto my-5 ' style="max-width: 600px;">
+        <div class="row">
+            <div class="col-12">
+                <form method='POST' class="bg-dark-subtle p-2 border rounded bg-secondary"> 
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">نام</label>
+                        <input type="text" name='name' class="form-control"  value="{{ request.POST.name|default_if_none:'' }}" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastname" class="form-label">نام خانوادگی</label>
+                        <input type="text" name='lastname' class="form-control" value="{{ request.POST.lastname|default_if_none:'' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">شماره همراه</label>
+                        <input type="text" name='phone' class="form-control" value="{{ request.POST.phone|default_if_none:'' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">رمز</label>
+                        <input type="password" name='password' class="form-control" value="{{ request.POST.password|default_if_none:'' }}">
+                    </div>
+                    <input type="submit" value="ارسال" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends "partitions/base.html" %}
+
+{% block title %}
+    سبد خرید
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>سبد خرید شما</h1>
+    {% if basket %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>محصول</th>
+                    <th>قیمت</th>
+                    <th>تعداد</th>
+                    <th>مجموع</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in basket.values %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.price }} تومان</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ total_price }} تومان</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>مجموع قیمت: {{ total_price }} تومان</h3>
+
+        <button class="btn btn-success">ادامه به پرداخت</button>
+    {% else %}
+        <p>سبد خرید شما خالی است.</p>
+    {% endif %}
+</div>
+{% endblock content %}
