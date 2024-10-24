@@ -1,13 +1,52 @@
 <!DOCTYPE html>
+{% extends "partitions/base.html" %}
+{% load crispy_forms_tags %}
 {% block head %}
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
 {% endblock head %}
 
 {% block title %}
-
+پروفایل
 {% endblock title %}
 
-
 {% block content %}
+<div class="container mt-5">
+    <h2>پروفایل شما</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">نام</label>
+            {{ form.name|as_crispy_field }}
+        </div>
+        <div class="mb-3">
+            <label  class="form-label">نام خانوادگی</label>
+            {{ form.lastname|as_crispy_field }}
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">شماره تلفن</label>
+            {{ form.phone|as_crispy_field }}
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label">آدرس</label>
+            <input type="text" class="form-control" name="address" 
+                value="{% if user.address %}{{ user.address }}{% endif %}" readonly />
+        </div>
+        <button type="button" class="btn text-primary mb-3" id="edit-button">
+            ویرایش آدرس <span class="text-success" style="font-size: 1.5em;">+</span>
+        </button> <!-- دکمه ویرایش با علامت به علاوه -->
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary" id="save-button" disabled>ذخیره</button> <!-- دکمه ذخیره غیرفعال -->
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('edit-button').addEventListener('click', function() {
+        const addressField = document.querySelector('input[name="address"]');
+        addressField.removeAttribute('readonly');  // قابل ویرایش کردن آدرس
+        addressField.focus();  // تمرکز روی فیلد آدرس
+        document.getElementById('save-button').disabled = false; // فعال کردن دکمه ذخیره
+    });
+</script>
 
 {% endblock content %}

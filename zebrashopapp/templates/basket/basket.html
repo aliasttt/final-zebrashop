@@ -1,40 +1,107 @@
-<!DOCTYPE html>
-{% extends "partitions/base.html" %}
+{% extends 'partitions/base.html' %}
 
-{% block title %}
-    سبد خرید
-{% endblock title %}
+{% load multiply %}  {# بارگذاری فیلتر سفارشی #}
 
 {% block content %}
 <div class="container mt-5">
-    <h1>سبد خرید شما</h1>
-    {% if basket %}
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>محصول</th>
-                    <th>قیمت</th>
-                    <th>تعداد</th>
-                    <th>مجموع</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in basket.values %}
+    <h2 class="text-center mb-4">سبد خرید</h2>
+    {% if request.session.basket %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
                     <tr>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.price }} تومان</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ total_price }} تومان</td>
+                        <th scope="col">محصول</th>
+                        <th scope="col">قیمت</th>
+                        <th scope="col">تعداد</th>
+                        <th scope="col">مجموع</th>
+                        <th scope="col">عملیات</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <h3>مجموع قیمت: {{ total_price }} تومان</h3>
-
-        <button class="btn btn-success">ادامه به پرداخت</button>
+                </thead>
+                <tbody>
+                    {% with total_price=0 %}
+                    {% for key, item in request.session.basket.items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.price }} تومان</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.price|multiply:item.quantity|floatformat:0 }} تومان</td>  {# استفاده از فیلتر multiply #}
+                            <td>
+                                <form method="post" action="{% url 'zebrashopapp:remove_from_basket' key %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% with item_total=item.price|multiply:item.quantity %}
+                            {% with total_price=total_price|add:item_total %}
+                            {% endwith %}
+                        {% endwith %}
+                    {% endfor %}
+                    <tr class="table-success">
+                        <td colspan="3" class="text-right"><strong>مجموع قیمت:</strong></td>
+                        <td><strong>{{ total_price|floatformat:0 }} تومان</strong></td>
+                        <td></td>
+                    </tr>
+                    {% endwith %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
-        <p>سبد خرید شما خالی است.</p>
+        <div class="alert alert-warning" role="alert">
+            <strong>سبد خرید شما خالی است.</strong>
+        </div>
     {% endif %}
+    <div class="text-center mt-3 mb-4">
+        <a href="{% url 'zebrashopapp:menu' %}" class="btn btn-primary">ادامه خرید</a>
+        <a href='{% url "{zebrashopapp:chechout}" %}'>
+            پرداخت
+        </a>
+    </div>
 </div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .table {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .table-dark {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table-success {
+        background-color: #d4edda;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .alert-warning {
+        background-color: #ffeeba;
+        color: #856404;
+        border: 1px solid #ffeeba;
+        border-radius: 8px;
+    }
+
+    h2 {
+        font-family: 'Arial', sans-serif;
+        color: #343a40;
+    }
+</style>
 {% endblock content %}

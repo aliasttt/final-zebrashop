@@ -43,29 +43,26 @@
         }
     }
 
-
     body {
         font-family: 'Vazir', sans-serif;
         direction: ltr;
         text-align: right;
         background-color: #f0f0f0; /* پس‌زمینه کل صفحه */
-      }
-      .btn-link {
+    }
+    .btn-link {
         color: #007bff;
         text-decoration: none;
-      }
-      .btn-link:hover {
+    }
+    .btn-link:hover {
         text-decoration: none;
-      }
-      .card {
-        
+    }
+    .card {
         border: 1px solid #ddd;
         border-radius: 8px;
-      }
-      .card-header {
-        
+    }
+    .card-header {
         color: white; /* رنگ متن هدر کارت */
-      }
+    }
 </style>
 {% endblock head %} 
 
@@ -74,13 +71,11 @@
     <div class="flex-container mx-auto">
         <div class="d-flex justify-content-center align-items-center">
             <div id='imagecarousel' class='carousel slide' data-ride='carousel'>
-
                 <ol class='carousel-indicators'>
                     <li data-target='#imagecarousel' data-slide-to='0' class='active'></li>
                     <li data-target='#imagecarousel' data-slide-to='1'></li>
                     <li data-target='#imagecarousel' data-slide-to='2'></li>
                 </ol>
-            
                 <div class='carousel-inner'>
                     <div class='carousel-item active'>
                         <img class='d-block w-100 large-image' src="{% static 'img/amir1.jpg' %}" alt="Image 1">
@@ -92,7 +87,6 @@
                         <img class='d-block w-100 large-image' src="{% static 'img/amir3.jpg' %}" alt="Image 3">
                     </div>
                 </div>
-                
                 <a class="carousel-control-prev" href="#imagecarousel" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">قبلی</span>
@@ -113,58 +107,51 @@
     </div>
 </div>
 
-
-
 <div class="container mt-5 mb-5">
     <h2 class="mb-4 text-center">سوالات متداول</h2>
     <div class="accordion" id="faqAccordion">
-  
-      <div class="card">
-        <div class="card-header" id="headingOne">
-          <h5 class="mb-0">
-            <button class="btn link-danger" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-              سوال ۱: چگونه محصول را سفارش دهم؟
-            </button>
-          </h5>
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn link-danger" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        سوال ۱: چگونه محصول را سفارش دهم؟
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#faqAccordion">
+                <div class="card-body">
+                    شما می‌توانید محصول مورد نظر را از طریق سایت سفارش دهید و سپس به صفحه پرداخت هدایت خواهید شد.
+                </div>
+            </div>
         </div>
-  
-        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#faqAccordion">
-          <div class="card-body">
-            شما می‌توانید محصول مورد نظر را از طریق سایت سفارش دهید و سپس به صفحه پرداخت هدایت خواهید شد.
-          </div>
+        <div class="card mt-3">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn link-danger collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        سوال ۲: روش‌های پرداخت موجود چیست؟
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#faqAccordion">
+                <div class="card-body">
+                    شما می‌توانید از روش‌های مختلف مانند کارت بانکی و PayPal برای پرداخت استفاده کنید.
+                </div>
+            </div>
         </div>
-      </div>
-  
-      <div class="card mt-3">
-        <div class="card-header" id="headingTwo">
-          <h5 class="mb-0">
-            <button class="btn link-danger collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              سوال ۲: روش‌های پرداخت موجود چیست؟
-            </button>
-          </h5>
+        <div class="card mt-3">
+            <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                    <button class="btn link-danger collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        سوال ۳: چه زمانی محصول به دستم می‌رسد؟
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#faqAccordion">
+                <div class="card-body">
+                    زمان تحویل محصول بسته به موقعیت جغرافیایی شما متفاوت است. معمولاً بین ۳ تا ۵ روز کاری طول می‌کشد.
+                </div>
+            </div>
         </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#faqAccordion">
-          <div class="card-body">
-            شما می‌توانید از روش‌های مختلف مانند کارت بانکی و PayPal برای پرداخت استفاده کنید.
-          </div>
-        </div>
-      </div>
-  
-      <div class="card mt-3">
-        <div class="card-header" id="headingThree">
-          <h5 class="mb-0">
-            <button class="btn link-danger collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              سوال ۳: چه زمانی محصول به دستم می‌رسد؟
-            </button>
-          </h5>
-        </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#faqAccordion">
-          <div class="card-body">
-            زمان تحویل محصول بسته به موقعیت جغرافیایی شما متفاوت است. معمولاً بین ۳ تا ۵ روز کاری طول می‌کشد.
-          </div>
-        </div>
-      </div>
-  
     </div>
 </div>
 
