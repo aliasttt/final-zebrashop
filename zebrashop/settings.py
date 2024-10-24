@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'zebrashopapp',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -73,17 +75,16 @@ WSGI_APPLICATION = 'zebrashop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-           'default': {
-               'ENGINE': 'django.db.backends.sqlite3',
-               'NAME': BASE_DIR / 'db.sqlite3',
-           }
-       }
+DATABASES = {  
+                   'default': {
+                       'ENGINE': 'django.db.backends.sqlite3',
+                      'NAME': BASE_DIR / 'db.sqlite3',                 }
+               }
 
 
 # DATABASES = {
-#            'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-#        }
+#                    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+#                }
 
 
 # Password validation
@@ -147,6 +148,24 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
+AUTHENTICATION_BACKENDS = [
+    'zebrashopapp.backends.PhoneBackend',  # مسیر درست به Backend خود را وارد کنید
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AUTH_USER_MODEL = 'zebrashopapp.RegisterModel'
+
+LOGOUT_REDIRECT_URL = 'zebrashopapp:home'
+
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # ذخیره session در دیتابیس
+SESSION_COOKIE_AGE = 1209600  # طول عمر session (در ثانیه، اینجا دو هفته)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # پایان session با بسته شدن مرورگر
+
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # pip freeze > requirements.txt
 

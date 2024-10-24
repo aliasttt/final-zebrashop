@@ -9,14 +9,16 @@ app_name = 'zebrashopapp'
 
 urlpatterns = [
     path('',views.home ,name='home'),
-    path('login',views.loginView , name='login'),
-    path('register',views.RegisterView,name='register'),
+     path('login/', views.loginView, name='login'),
+    path('register/', views.RegisterView, name='register'),
     path('menu',views.MenuViews,name='menu'),
     path('product-detail/<int:id>/',views.product_detail,name='product-detail'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='zebrashopapp:home'), name='logout'),
     path('profile',views.ProfileViews , name='profile'),
-    path('add-to-basket/<int:id>/', views.basket_view, name='add_to_basket'),
-
+    path('add-to-basket/<int:id>/', views.add_to_basket, name='add_to_basket'),
+    path('basket', views.basket_view, name='basket_view'),
+    path('remove/<str:item_id>/', views.remove_from_basket, name='remove_from_basket'),
+    path('checkout/', views.checkout, name='checkout'),
 
 ]
 

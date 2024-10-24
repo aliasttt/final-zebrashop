@@ -32,3 +32,12 @@ class ProductAdmin(admin.ModelAdmin):
 #     list_display = ('product','size','stock')
 #     list_editable = ('size','stock')
     
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('user','total_price','city','created_at','is_paid','address')
+
+
+@admin.register(OrderItem)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('order','product','size','quantity','price')
+    
