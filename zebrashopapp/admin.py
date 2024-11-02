@@ -1,14 +1,14 @@
 from django.contrib import admin
 from .models import *
 
+
 @admin.register(RegisterModel)
-class RegisterMOdelAdmin(admin.ModelAdmin):
-    list_display =('name','lastname','password','phone')
-    search_fields = ('name', 'lastname') 
+class RegisterModelAdmin(admin.ModelAdmin):
+    list_display = ('name', 'lastname', 'phone')  # حذف password به دلایل امنیتی
+    search_fields = ('name', 'lastname')
     ordering = ('name',)
     list_filter = ('lastname',)
-    list_editable=('password','phone')
-
+    list_editable = ('phone',)
 
 class ProductSizeInline(admin.TabularInline):
     model = ProductSize
@@ -35,9 +35,12 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('user','total_price','city','created_at','is_paid','address')
+    list_editable = ('total_price','city','is_paid','address')
 
 
 @admin.register(OrderItem)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('order','product','size','quantity','price')
+    
+
     

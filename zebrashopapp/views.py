@@ -8,6 +8,27 @@ from django.contrib.auth.backends import ModelBackend
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.views.decorators.csrf import csrf_exempt
+
+
+@login_required
+def custom_view(request):
+    # بررسی کنید که آیا کاربر دارای permission خاصی هست یا خیر
+    if request.user.has_perm('zebrashopapp.is_frontend_user'):
+        # معاف کردن کاربر از بررسی CSRF
+        return process_without_csrf(request)
+    else:
+        # سایر کاربران با توکن CSRF بررسی می‌شوند
+        return process_with_csrf(request)
+
+@csrf_exempt
+def process_without_csrf(request):
+    # پردازش درخواست برای کاربرانی که از بررسی CSRF معاف هستند
+    return JsonResponse({'message': 'CSRF check skipped for frontend user'})
+
+def process_with_csrf(request):
+    # پردازش درخواست برای سایر کاربران
+    return JsonResponse({'message': 'CSRF check completed'})
 
 
 
@@ -22,24 +43,19 @@ def product(request):
     pass
 
 
-
+@csrf_exempt
 def loginView(request):
     if request.method == 'POST':
         phone = request.POST.get('phone')
         password = request.POST.get('password')
 
-        try:
-            user = RegisterModel.objects.get(phone=phone)
-            if user.check_password(password):
-                # ورود موفق
-                # از request.user.set_authenticated استفاده کنید اگر نیاز دارید
-                # با استفاده از session می‌توانید کاربر را در سیستم نگه دارید
-                request.session['user_id'] = user.id  # ذخیره id کاربر در سشن
-                return redirect('zebrashopapp:home')  # به صفحه اصلی یا هر صفحه دیگر بروید
-            else:
-                messages.error(request, 'رمز عبور نادرست است.')
-        except RegisterModel.DoesNotExist:
-            messages.error(request, 'کاربر وجود ندارد.')
+        user = authenticate(request, username=phone, password=password)  # authenticate با استفاده از شماره تلفن و پسورد
+
+        if user is not None:
+            login(request, user)  # لاگین کاربر
+            return redirect('zebrashopapp:home')
+        else:
+            messages.error(request, 'شماره تلفن یا رمز عبور نادرست است.')
 
     return render(request, 'login/login.html')
 
@@ -141,25 +157,77 @@ def add_to_basket(request, id):
 
         # ذخیره سبد خرید در جلسه
         request.session['basket'] = basket
+        
+        # ثبت سفارش و آیتم سفارش در مدل
+        if request.user.is_authenticated:
+            order, created = Order.objects.get_or_create(
+                user=request.user,
+                is_paid=False  # فقط سبد خرید غیر پرداخت شده
+            )
+            order_item, item_created = OrderItem.objects.get_or_create(
+                order=order,
+                product=product,
+                size=selected_size.size,
+                defaults={'quantity': 0, 'price': product.price}
+            )
+
+            # افزایش تعداد آیتم در سفارش
+            order_item.quantity += 1
+            order_item.save()
+
+            # محاسبه مجموع قیمت و مقداردهی به total_price
+            order.total_price = sum(item.price * item.quantity for item in order.items.all())  # استفاده از related_name
+            order.save()  # ذخیره‌سازی تغییرات در مجموع قیمت
+
         return redirect('zebrashopapp:product-detail', id=product.id)
 
     return redirect('zebrashopapp:product-detail', id=id)
 
 
+from django.http import JsonResponse
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import OrderItem
+
 def remove_from_basket(request, item_id):
-    if request.method == 'POST':
-        # بازیابی سبد خرید از جلسه
-        basket = request.session.get('basket', {})
+    if request.method == "POST":
+        try:
+            # حذف از سبد خرید در سشن
+            basket = request.session.get('basket', {})
+            if item_id in basket:
+                del basket[item_id]  # حذف آیتم از سبد خرید در سشن
+                request.session['basket'] = basket
+                
+                # اگر سبد خرید خالی شد، سبد را از سشن حذف کنید
+                if not basket:
+                    del request.session['basket']
 
-        # بررسی وجود آیتم در سبد
-        if item_id in basket:
-            del basket[item_id]
-            request.session['basket'] = basket
+            # حذف آیتم از دیتابیس
+            order_item = get_object_or_404(OrderItem, id=item_id)  # با فیلتر کاربر اگر لازم است
+            order_item.delete()  # حذف آیتم از دیتابیس
 
-    return redirect('zebrashopapp:basket_view')
+            return redirect('zebrashopapp:basket_view')  # ریدایرکت به ویوی سبد خرید
+            
+        except Exception as e:
+            return redirect('zebrashopapp:basket_view')  # در صورت بروز خطا نیز ریدایرکت کنید
+    else:
+        return redirect('zebrashopapp:basket_view')
+
+def checkout_view(request):
+    # تابع برای نمایش صفحه پرداخت
+    order_items = []  # لیست آیتم‌های سفارش (باید از سبد خرید استخراج شود)
+    total_price = 0  # مجموع قیمت
+
+    # کدهای لازم برای پر کردن order_items و total_price
+
+    context = {
+        'order_items': order_items,
+        'total_price': total_price,
+        'user_info': request.user,  # فرض بر این است که اطلاعات کاربر وجود دارد
+    }
+    return render(request, 'your_template.html', context)
 
 
-    
 
 @login_required
 def ProfileViews(request):
@@ -184,7 +252,12 @@ def calculate_total_price(order_items):
 
 def checkout(request):
     # فرض می‌کنیم که کاربر فعلی را می‌توانیم به دست آوریم
-    order_items = OrderItem.objects.filter(order__user=request.user)  # فیلتر بر اساس کاربر فعلی
+    order_items = OrderItem.objects.filter(order__user=request.user, order__is_paid=False)  # آیتم‌های سبد خرید کاربر
+
+    if not order_items.exists():
+        # اگر آیتمی در سبد خرید نیست، هدایت به صفحه سبد خرید
+        return redirect('zebrashopapp:basket_view')
+
     total_price = calculate_total_price(order_items)
 
     if request.method == 'POST':
@@ -196,11 +269,20 @@ def checkout(request):
                 address=form.cleaned_data['address'],
                 city=form.cleaned_data['city'],
                 total_price=total_price,
+                is_paid=False,  # در ابتدا پرداخت نشده است
             )
             order.save()  # ذخیره سفارش
-            # اینجا می‌توانید منطق مربوط به پرداخت را اضافه کنید
-            return redirect('payment_success')  # مسیر موفقیت پرداخت (تعریف کن)
 
+            # به‌روزرسانی آیتم‌های سبد خرید به سفارش جدید
+            order_items.update(order=order)  # حذف status='ordered' چون فیلد status در مدل OrderItem وجود ندارد
+
+            # پاک کردن سبد خرید از سشن
+            if 'basket' in request.session:
+                del request.session['basket']
+
+            # اینجا می‌توانید منطق مربوط به پرداخت را اضافه کنید
+
+            return redirect('zebrashopapp:checkout_success')  # مسیر موفقیت پرداخت (تعریف کن)
     else:
         # در صورت GET، فرم جدید را ایجاد کن
         form = OrderReviewForm(initial={
@@ -213,4 +295,49 @@ def checkout(request):
         'total_price': total_price,
         'order_items': order_items,  # اضافه کردن order_items به context برای نمایش
     }
-    return render(request, 'checkout.html', context)
+    return render(request, 'checkout/checkout.html', context)
+
+
+
+def previous_orders(request):
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user).prefetch_related('items')
+    else:
+        orders = []
+
+    return render(request, 'previous_orders/previous_orders.html', {'orders': orders})
+
+
+
+
+def About_Us(request):
+    return render(request,'about_us/about_us.html')
+
+
+def Contact_Us(request):
+    context = {}  # ایجاد کانتکست برای ارسال پیام‌ها به قالب
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')  # ایمیل کاربر
+        message = request.POST.get('message')
+
+        # متن ایمیل
+        email_subject = f"پیام از طرف {name}"
+        email_message = f"نام و نام خانوادگی: {name}\nشماره تماس: {phone}\nایمیل: {email}\n\nپیام:\n{message}"
+
+        # تلاش برای ارسال ایمیل
+        try:
+            send_mail(
+                email_subject,
+                email_message,
+                "aliasadi3853@gmail.com",  # ایمیل شما به عنوان فرستنده
+                ["aliasadi3853@gmail.com"],  # ایمیل شما به عنوان گیرنده
+                fail_silently=False,
+            )
+            context['success_message'] = 'پیام شما با موفقیت ارسال شد!'
+        except Exception as e:
+            context['error_message'] = f"خطا در ارسال ایمیل: {e}"
+
+    return render(request, 'contact_us/contact_us.html', context)

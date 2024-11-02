@@ -1,0 +1,54 @@
+{% extends 'partitions/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">خریدهای قبلی</h2>
+    {% if orders %}
+        <ul class="list-group">
+            {% for order in orders %}
+                {% if order.is_paid %}  <!-- فقط نمایش خریدهای پرداخت شده -->
+                    <li class="list-group-item">
+                        <h5 class="mb-3">شماره سفارش: {{ order.id }}</h5>
+                        <p><strong>آدرس:</strong> {{ order.address }}</p>
+                        <p><strong>شهر:</strong> {{ order.city }}</p>
+                        <p><strong>قیمت کل:</strong> {{ order.total_price }} <span class="text-muted">تومان</span></p>
+                        <p><strong>تاریخ سفارش:</strong> {{ order.created_at|date:"d M Y" }}</p>
+                        <p>
+                            <strong>وضعیت پرداخت:</strong> 
+                            <span class="badge bg-success">پرداخت شده</span>
+                        </p>
+
+                        <h6 class="mt-4">اقلام:</h6>
+                        {% if order.items.all %}
+                            <ul class="list-group">
+                                {% for item in order.items.all %}
+                                    <li class="list-group-item">
+                                        <strong>محصول:</strong> {{ item.product_name }} <br>
+                                        <strong>سایز:</strong> {{ item.size }} <br>
+                                        <strong>تعداد:</strong> {{ item.quantity }} <br>
+                                        <strong>قیمت:</strong> {{ item.price }} <span class="text-muted">تومان</span>
+                                        {% if item.image %}  <!-- بررسی وجود تصویر -->
+                                            <div>
+                                                <img src="{{ item.image.url }}" alt="{{ item.product_name }}" class="img-thumbnail" style="max-width: 100px;"/>
+                                            </div>
+                                        {% else %}
+                                            <p class="text-muted">عکسی برای این محصول وجود ندارد.</p>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">این سفارش خالی است.</p>  <!-- پیام خالی بودن سبد خرید -->
+                        {% endif %}
+                    </li>
+
+                    {% else %}
+                        <h5 class="text-center bg-opacity-50 bg-warning m-5 p-2">شما هیچ خریدی ندارید.</h5>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h5 class="text-center bg-opacity-50 bg-warning m-5 p-2">شما هیچ خریدی ندارید.</h5>
+    {% endif %}
+</div>
+{% endblock content %}

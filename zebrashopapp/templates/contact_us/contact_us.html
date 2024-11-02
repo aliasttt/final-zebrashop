@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% extends "partitions/base.html" %}
+{% block head %}
+
+
+
+{% endblock head %}
+
+{% block title %}
+تماس با ما
+{% endblock title %}
+
+{% block content %}
+<div class='container'>
+
+{% if success_message %}
+<div class='alert alert-success alert-dismissible fade show m-3'>
+    <button class="btn-close" data-bs-dismiss="alert"></button>
+    پیام شما با موفقیت ثبت شد
+</div>
+
+{% endif %}
+
+{% if error_message %}
+<div class='alert alert-danger alert-dismissible fade show m-3'>
+    <button class="btn-close" data-bs-dismiss="alert"></button>
+    خطا در ارسال ایمیل
+</div>
+ 
+{% endif %}
+</div>
+<div class="container my-5">
+    <div class="row">
+      <!-- Contact Information Section -->
+      <div class="col-md-6">
+        <h3 class="mb-3">اطلاعات تماس</h3>
+        <p>تلفن: 021 - 28425028</p>
+        <p>تلفن: 021 - 22792719</p>
+        <p>پست الکترونیک: <a href="mailto:info@kialux.ir">info@kialux.ir</a></p>
+        <p>آدرس: تهران، خیابان پاسداران، کوچه بوستان هشتم، پلاک 21</p>
+        <h5 class="mt-4">پشتیبانی</h5>
+        <p>تلفن همراه: 09198070250</p>
+        <p>تلفن همراه: 09393000362</p>
+        <p>تلفن ترکیه: +90 531 825 72 52</p>
+        <p>تلفن ترکیه: +90 536 614 30 00</p>
+        <p>پست الکترونیک: <a href="mailto:sup@kialux.ir">sup@kialux.ir</a></p>
+        <h5 class="mt-4">ساعت تماس</h5>
+        <p>شنبه تا چهارشنبه: 10 صبح الی 5 بعد از ظهر</p>
+        <p>پنج‌شنبه: 10 صبح الی 2 بعد از ظهر</p>
+      </div>
+  
+      <!-- Feedback Form Section -->
+      <div class="col-md-6">
+        <h3 class="mb-3">ارسال نظر</h3>
+        <form action="mailto:your-email@example.com" method="post" enctype="text/plain">
+          <div class="mb-3">
+            <label for="name" class="form-label">نام و نام خانوادگی</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">شماره تماس</label>
+            <input type="tel" class="form-control" id="phone" name="phone" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">ایمیل</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">پیام</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">ارسال نظر</button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Home and Contact Links -->
+    <div class="mt-4 text-end">
+      <a href="/" class="text-decoration-none text-primary mx-2">
+        خانه <span class="arrow" style="font-size: 1.2em;">&#8592;</span>
+      </a>
+      <span class="text-secondary">| تماس با ما</span>
+    </div>
+  </div>
+{% endblock content %}
+

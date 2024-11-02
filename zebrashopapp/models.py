@@ -3,7 +3,23 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.hashers import make_password , check_password
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
-    
+from django.contrib.auth.models import User
+import jdatetime
+
+
+class RohamModel(models.Model):
+    # سایر فیلدهای مدل خود را اینجا اضافه کنید
+
+    class Meta:
+        permissions = [
+            ("is_frontend_user", "Can access frontend without CSRF check"),
+        ]
+
+
+
+
+
+
 class ProductsModel(models.Model):
     name = models.CharField(max_length=20)
     descriptions = models.TextField(max_length=200)
@@ -91,9 +107,14 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.CharField(max_length=255,default='')
     city = models.CharField(max_length=100,default='')
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
+
+    @property
+    def shamsi_created_at(self):
+        # تبدیل تاریخ میلادی به تاریخ شمسی
+        return jdatetime.datetime.fromgregorian(datetime=self.created_at).strftime('%Y-%m-%d %H:%M:%S')
 
     def __str__(self):
         return f"Order {self.id} by {self.user.name} {self.user.lastname}"

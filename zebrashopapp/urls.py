@@ -19,7 +19,11 @@ urlpatterns = [
     path('basket', views.basket_view, name='basket_view'),
     path('remove/<str:item_id>/', views.remove_from_basket, name='remove_from_basket'),
     path('checkout/', views.checkout, name='checkout'),
-
+    path('checkout_success',views.checkout , name='checkout_success'),
+    path('previous_orders',views.previous_orders , name='previous_orders'),
+    path('custom-view/', views.custom_view, name='custom_view'),
+    path('about_us',views.About_Us , name='about_us'),
+    path('contact_us',views.Contact_Us , name='contact_us'),
 ]
 
 if settings.DEBUG:

@@ -2,21 +2,28 @@
 
 {% block head %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        #user{
+            font-size: 1.5rem !important;
+        }
+    </style>
 {% endblock head %}
 
 {% block content %}
 <div class="container bg-secondary rounded-pill d-flex justify-content-between align-items-center p-2">
     <!-- دکمه منوی کشویی -->
     {% if user.is_authenticated %}
-        <a class="nav-link h4 text-danger" href="#" id="offcanvasUserToggle" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUserMenu" aria-controls="offcanvasUserMenu">
-             {{ user.name }} {{ user.lastname }}
+        <a id='user' class="nav-link h4 text-danger" href="#" id="offcanvasUserToggle" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUserMenu" aria-controls="offcanvasUserMenu">
+             <i class="fas fa-bars"></i> <!-- آیکون سه خط -->
+             {% comment %} {{ user.name }} {{ user.lastname }} {% endcomment %}
         </a>
     {% else %}
         <div class="dropdown">
             <a class="nav-link dropdown-toggle h4 text-danger" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 ورود
             </a>
-            <ul class="dropdown-menu bg-secondary " aria-labelledby="navbarDropdown">
+            <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item h4 text-danger" href="{% url 'zebrashopapp:login' %}">ورود</a></li>
                 <li><a class="dropdown-item h4 text-danger" href="{% url 'zebrashopapp:register' %}">ثبت نام</a></li>
             </ul>
@@ -29,7 +36,6 @@
     
     <!-- آیکون سبد خرید -->
     {% if user.is_authenticated %}
-    
     <div class="cart-icon position-relative">
         <a href="{% url 'zebrashopapp:basket_view' %}" class="nav-link">
             <i class="fas fa-shopping-cart fa-2x"></i>
@@ -49,14 +55,18 @@
 <!-- منوی کشویی کاربر -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasUserMenu" aria-labelledby="offcanvasUserMenuLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasUserMenuLabel">اطلاعات کاربر</h5>
+        <h5 class="offcanvas-title" id="offcanvasUserMenuLabel">{{ user.name }} {{ user.lastname }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="بستن"></button>
     </div>
-    <div class="offcanvas-body">
-        <p>نام: {{ user.name }}</p>
+    <div class="offcanvas-body d-flex flex-column">
+        {% comment %} <p>نام: {{ user.name }}</p>
         <p>نام خانوادگی: {{ user.lastname }}</p>
-        <p>شماره تلفن: {{user.phone}}</p>
-        <a href="{% url 'zebrashopapp:profile' %}" class="btn btn-primary">مشاهده پروفایل</a>
+        <p>شماره تلفن: {{ user.phone }}</p> {% endcomment %}
+        <a href="{% url 'zebrashopapp:about_us' %}" class="btn btn-outline-secondary mb-2 w-100">درباره ما</a>
+        <a href="{% url 'zebrashopapp:contact_us' %}" class="btn btn-outline-secondary mb-2 w-100">تماس با ما</a>
+        
+        <a href="{% url 'zebrashopapp:profile' %}" class="btn btn-primary mb-2">مشاهده پروفایل</a>
+        <a href="{% url 'zebrashopapp:previous_orders' %}" class="btn btn-primary mb-2">خرید های شما</a>
         <form method="POST" action="{% url 'zebrashopapp:logout' %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">خروج</button>
