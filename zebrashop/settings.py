@@ -2,6 +2,9 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
+from decouple import config
+
+
 
 load_dotenv()
 
@@ -13,10 +16,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$qkj2*yk9c)*f3z#yo1%b=5s%0p1sxt8qlsn-lhto9wmy)h(_)'
+# SECRET_KEY = 'django-insecure-$qkj2*yk9c)*f3z#yo1%b=5s%0p1sxt8qlsn-lhto9wmy)h(_)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'zebrashopapp',
     'crispy_forms',
     'crispy_bootstrap5',
+    'axes',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'zebrashop.urls'
@@ -75,16 +80,16 @@ WSGI_APPLICATION = 'zebrashop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {  
-                       'default': {
-                           'ENGINE': 'django.db.backends.sqlite3',
-                          'NAME': BASE_DIR / 'db.sqlite3',                 }
-                   }
+# DATABASES = {  
+#                         'default': {
+#                             'ENGINE': 'django.db.backends.sqlite3',
+#                            'NAME': BASE_DIR / 'db.sqlite3',                 }
+#                     }
 
 
-# DATABASES = {
-#                        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-#                    }
+DATABASES = {
+                         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+                     }
 
 
 # Password validation
@@ -151,6 +156,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTHENTICATION_BACKENDS = [
     'zebrashopapp.backends.PhoneBackend',  # مسیر درست به Backend خود را وارد کنید
     'django.contrib.auth.backends.ModelBackend',
+    'axes.backends.AxesStandaloneBackend',
 ]
 
 AUTH_USER_MODEL = 'zebrashopapp.RegisterModel'
@@ -169,3 +175,46 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # pip freeze > requirements.txt
 
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+X_FRAME_OPTIONS = 'DENY'
+
+
+
+AXES_FAILURE_LIMIT = 5  # تعداد دفعات تلاش ناموفق قبل از مسدودسازی
+AXES_COOLOFF_TIME = 24  # زمان مسدودسازی به ساعت
+
+
+SECRET_KEY = config('SECRET_KEY')
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'django_warnings.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}

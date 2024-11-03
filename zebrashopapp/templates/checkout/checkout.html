@@ -19,7 +19,6 @@
                 <option value="اصفهان" {% if user_info.city == 'اصفهان' %}selected{% endif %}>اصفهان</option>
                 <option value="مشهد" {% if user_info.city == 'مشهد' %}selected{% endif %}>مشهد</option>
                 <option value="شیراز" {% if user_info.city == 'شیراز' %}selected{% endif %}>شیراز</option>
-                <!-- سایر شهرها -->
             </select>
         </div>
 
@@ -39,7 +38,11 @@
         {% endif %}
 
         <p>مجموع قیمت: <strong>{{ total_price }}</strong> تومان</p>
-        <button type="submit" class="btn btn-primary mb-5">رفتن به درگاه پرداخت</button>
+
+        {# لینک واتساپ با پیام پیش‌فرض #}
+        <a href="https://wa.me/905340382335?text=آدرس: {{ user_info.address }}، شهر: {{ user_info.city }}، مجموع قیمت: {{ total_price }} تومان، جزئیات خرید: {% for item in order_items %} \n {{ item.product.name }} - سایز: {{ item.size }} - تعداد: {{ item.quantity }} - قیمت: {{ item.price }} {% endfor %}" class="btn btn-primary mb-5">
+            ارسال به واتساپ
+        </a>
     </form>
 </div>
 {% endblock content %}

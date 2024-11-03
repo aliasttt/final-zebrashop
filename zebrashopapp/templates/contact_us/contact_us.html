@@ -1,9 +1,33 @@
+
 <!DOCTYPE html>
 {% extends "partitions/base.html" %}
 {% block head %}
-
-
-
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    body {
+        background-color: #f8f9fa; /* رنگ پس‌زمینه کمرنگ */
+    }
+    .contact-info {
+        border-bottom: 2px solid #dc3545; /* خط افقی */
+        padding-bottom: 20px; /* فاصله پایین */
+        margin-bottom: 20px; /* فاصله پایین */
+    }
+    .contact-info p {
+        transition: font-size 0.3s; /* انیمیشن تغییر اندازه فونت */
+    }
+    .contact-info p:hover {
+        font-size: 1.1rem; /* اندازه فونت بزرگتر در هاور */
+    }
+    .divider {
+        border-bottom: 1px solid #dc3545; /* خط افقی */
+        margin: 20px 0; /* فاصله بالا و پایین */
+    }
+    .vertical-divider {
+        border-left: 2px solid #dc3545; /* خط عمودی */
+        height: auto; /* ارتفاع خودکار */
+        margin: 0 20px; /* فاصله چپ و راست */
+    }
+</style>
 {% endblock head %}
 
 {% block title %}
@@ -18,7 +42,6 @@
     <button class="btn-close" data-bs-dismiss="alert"></button>
     پیام شما با موفقیت ثبت شد
 </div>
-
 {% endif %}
 
 {% if error_message %}
@@ -26,29 +49,22 @@
     <button class="btn-close" data-bs-dismiss="alert"></button>
     خطا در ارسال ایمیل
 </div>
- 
 {% endif %}
 </div>
 <div class="container my-5">
-    <div class="row">
+    <div class="row text-right"> <!-- راست‌چین کردن محتوا -->
       <!-- Contact Information Section -->
-      <div class="col-md-6">
-        <h3 class="mb-3">اطلاعات تماس</h3>
-        <p>تلفن: 021 - 28425028</p>
-        <p>تلفن: 021 - 22792719</p>
-        <p>پست الکترونیک: <a href="mailto:info@kialux.ir">info@kialux.ir</a></p>
-        <p>آدرس: تهران، خیابان پاسداران، کوچه بوستان هشتم، پلاک 21</p>
+      <div class="col-md-6 contact-info">
         <h5 class="mt-4">پشتیبانی</h5>
-        <p>تلفن همراه: 09198070250</p>
-        <p>تلفن همراه: 09393000362</p>
-        <p>تلفن ترکیه: +90 531 825 72 52</p>
-        <p>تلفن ترکیه: +90 536 614 30 00</p>
-        <p>پست الکترونیک: <a href="mailto:sup@kialux.ir">sup@kialux.ir</a></p>
-        <h5 class="mt-4">ساعت تماس</h5>
-        <p>شنبه تا چهارشنبه: 10 صبح الی 5 بعد از ظهر</p>
-        <p>پنج‌شنبه: 10 صبح الی 2 بعد از ظهر</p>
+        <p>تلفن همراه: 09124740747</p>
+        <p>تلفن همراه: 09121732135</p>
+        <p>تلفن ترکیه: +90 5340382335 </p> <!-- شماره تلفن ترکیه با پیش‌شماره +90 -->
+        <p>پست الکترونیک: <a href="mailto:zebrrashop@gmail.com" class='text-decoration-none'>zebrrashop@gmail.com</a></p>
       </div>
-  
+
+      <!-- Vertical Divider -->
+      <div class="vertical-divider d-none d-md-block"></div> <!-- این خط برای صفحه‌نمایش‌های بزرگ قابل مشاهده است -->
+
       <!-- Feedback Form Section -->
       <div class="col-md-6">
         <h3 class="mb-3">ارسال نظر</h3>
@@ -73,7 +89,10 @@
         </form>
       </div>
     </div>
-  
+
+    <!-- خط افقی بین بخش‌ها -->
+    <div class="divider"></div>
+
     <!-- Home and Contact Links -->
     <div class="mt-4 text-end">
       <a href="/" class="text-decoration-none text-primary mx-2">
@@ -83,4 +102,3 @@
     </div>
   </div>
 {% endblock content %}
-
