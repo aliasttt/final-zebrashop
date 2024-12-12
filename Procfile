@@ -1,1 +1,1 @@
-web: gunicorn zebrashop.wsgi:application --log-file -
+web: gunicorn zebrashop.wsgi
