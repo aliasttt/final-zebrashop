@@ -3,6 +3,8 @@ import os
 import dj_database_url
 from dotenv import load_dotenv
 from decouple import config
+import django_heroku
+django_heroku.settings(locals())
 
 
 
