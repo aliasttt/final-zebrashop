@@ -1,31 +1,15 @@
-from pathlib import Path
 import os
-import dj_database_url
-from dotenv import load_dotenv
-from decouple import config
-import django_heroku
-
-# بارگذاری متغیرهای محیطی از فایل .env
-load_dotenv()
-
-# فعال‌سازی تنظیمات Heroku
-django_heroku.settings(locals())
+from pathlib import Path
 
 # مسیر اصلی پروژه
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# امنیت
-SECRET_KEY = config('SECRET_KEY', default='&z8!d9b1$u7t^k3@p5g#l1x2q4%f6*r9w+y7z0m!a8p3h2l!q6')
-DEBUG = False
+# امنیت و تنظیمات اصلی
+SECRET_KEY = 'your-secret-key'
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'zebrashop.com.tr',
-    '185.208.181.154',
-]
-
-# اپلیکیشن‌ها
+# نصب برنامه‌ها
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -33,41 +17,37 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'zebrashopapp',
-    'crispy_forms',
-    'crispy_bootstrap5',
-    'axes',
+    'django_heroku',
+    # سایر اپلیکیشن‌ها
 ]
 
-# میان‌افزارها
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'axes.middleware.AxesMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-]
-
-# پیکربندی پایگاه داده (Heroku)
+# تنظیمات مبدأ دیتابیس
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'zebrashop',
+        'USER': 'your-db-user',
+        'PASSWORD': 'your-db-password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
-# پیکربندی استاتیک
+# تنظیمات فایل‌های استاتیک
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# تنظیمات قالب‌ها
+# تنظیمات استاتیک برای Heroku
+django_heroku.settings(locals())
+
+# تنظیمات مسیر‌های دیگر
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,90 +60,6 @@ TEMPLATES = [
     },
 ]
 
-# تنظیمات واریز
-WSGI_APPLICATION = 'zebrashop.wsgi.application'
-
-# اعتبارسنجی رمز عبور
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-# تنظیمات زبان و منطقه زمانی
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
-
-# تنظیمات رسانه‌ها
+# تنظیمات فایل‌های Media (برای آپلود فایل‌ها)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-# پیکربندی ایمیل
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'aliasadi3853@gmail.com'
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  # رمز عبور از فایل .env
-EMAIL_USE_TLS = True
-
-# تنظیمات احراز هویت
-AUTHENTICATION_BACKENDS = [
-    'zebrashopapp.backends.PhoneBackend',
-    'django.contrib.auth.backends.ModelBackend',
-    'axes.backends.AxesStandaloneBackend',
-]
-
-# مدل کاربری سفارشی
-AUTH_USER_MODEL = 'zebrashopapp.RegisterModel'
-
-# تنظیمات خروج
-LOGOUT_REDIRECT_URL = 'zebrashopapp:home'
-
-# تنظیمات سشن
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_AGE = 1209600
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-# تنظیمات امنیتی
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-
-# محدودیت‌های آدرس‌های ناموفق ورود
-AXES_FAILURE_LIMIT = 5
-AXES_COOLOFF_TIME = 24
-
-# پیکربندی لاگینگ
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'WARNING',
-            'propagate': True,
-        },
-    },
-}
