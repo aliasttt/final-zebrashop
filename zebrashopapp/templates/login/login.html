@@ -13,19 +13,52 @@
 {% endif %}
 
 <div class="container d-flex align-items-center justify-content-center min-vh-100">
-    <form class="bg-danger-subtle border rounded d-flex flex-column gap-3 p-4" method="post">
+    <form class="form-container d-flex flex-column gap-3" method="post">
         {% csrf_token %}
-        <label class="form-label">
-            :شماره همراه
-            <input class="form-control" name='phone' type="text" value='{{ request.POST.phone|default_if_none:"" }}' autocomplete="tel" required>
+        <h3 class="text-center text-primary">ورود به حساب کاربری</h3>
+        <label class="form-label ">
+
+             شماره تلفن:
+            <input class="form-control mt-2" name='phone' type="text" value='{{ request.POST.phone|default_if_none:"" }}' autocomplete="tel" required>
         </label>
         <label class="form-label pb-3">
-            :رمز
-            <input class="form-control" name='password' type="password" value='{{ request.POST.password|default_if_none:"" }}' autocomplete="current-password" required>
+            رمز:
+            <input class="form-control mt-2" name='password' type="password" value='{{ request.POST.password|default_if_none:"" }}' autocomplete="current-password" required>
         </label>
         <input class="btn btn-primary" type="submit" value="ارسال">
-        <div class='ps-3'>اگر حساب ندارید <a class="link-info text-decoration-none" href="{% url "zebrashopapp:register" %}">کلیک</a> کنید</div>
+        <div class='ps-3 text-center'>اگر حساب ندارید <a class="link-info text-decoration-none" href="{% url 'zebrashopapp:register' %}">کلیک</a> کنید</div>
     </form>
 </div>
 
 {% endblock content %}
+
+{% block head %}
+<style>
+    .bg-lightblue {
+        background-color: #f5f5f5; /* Light grey background */
+        border-radius: 10px; /* Round the corners of the form */
+        padding: 20px; /* Add padding inside the form */
+    }
+
+    .form-container {
+        background: linear-gradient(135deg, #e0f7fa, #b2ebf2); /* Light blue gradient */
+        border-radius: 10px; /* Round corners */
+        padding: 40px; /* Padding around the form */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    }
+
+    .form-label {
+        font-weight: bold; /* Make label text bold */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Primary button color */
+        border: none; /* Remove border */
+        transition: background-color 0.3s; /* Smooth transition for hover effect */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+    }
+</style>
+{% endblock head %}

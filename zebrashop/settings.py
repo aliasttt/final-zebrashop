@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-$qkj2*yk9c)*f3z#yo1%b=5s%0p1sxt8qlsn-lhto9wmy)h(_)'
-
+SECRET_KEY = config('SECRET_KEY',default = '&z8!d9b1$u7t^k3@p5g#l1x2q4%f6*r9w+y7z0m!a8p3h2l!q6')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -53,8 +53,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ROOT_URLCONF = 'zebrashop.urls'
 
 TEMPLATES = [
@@ -81,15 +82,15 @@ WSGI_APPLICATION = 'zebrashop.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # DATABASES = {  
-#                         'default': {
-#                             'ENGINE': 'django.db.backends.sqlite3',
-#                            'NAME': BASE_DIR / 'db.sqlite3',                 }
-#                     }
+#                           'default': {
+#                               'ENGINE': 'django.db.backends.sqlite3',
+#                             'NAME': BASE_DIR / 'db.sqlite3',                 }
+#                       }
 
 
 DATABASES = {
-                         'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-                     }
+                           'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+                       }
 
 
 # Password validation
@@ -196,7 +197,7 @@ AXES_FAILURE_LIMIT = 5  # تعداد دفعات تلاش ناموفق قبل ا�
 AXES_COOLOFF_TIME = 24  # زمان مسدودسازی به ساعت
 
 
-SECRET_KEY = config('SECRET_KEY')
+
 
 
 
@@ -204,15 +205,13 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': 'django_warnings.log',
+        'console': {
+            'class': 'logging.StreamHandler',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'WARNING',
             'propagate': True,
         },

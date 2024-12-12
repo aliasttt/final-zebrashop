@@ -16,7 +16,11 @@ class RohamModel(models.Model):
         ]
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=30, unique=True)
 
+    def __str__(self):
+        return self.name
 
 
 
@@ -26,6 +30,7 @@ class ProductsModel(models.Model):
     image = models.ImageField(upload_to='media/')
     price = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    tags = models.ManyToManyField(Tag, related_name='products', blank=True)
     # فیلد stock را از اینجا بردارید چون حالا موجودی هر سایز در مدل ProductSize مدیریت می‌شود
 
     def __str__(self):

@@ -97,17 +97,28 @@ def RegisterView(request):
 
 
 def MenuViews(request):
+    # دریافت پارامترهای جستجو و فیلتر از کوئری استرینگ URL
+    search_query = request.GET.get('q', '').strip()  # جستجو
+    tag_filter = request.GET.get('tag', '').strip()  # فیلتر براساس برچسب
+
+    # فیلتر محصولات براساس پارامترها
     products = ProductsModel.objects.all()
-    images = ProductImages.objects.all()  
+    if search_query:
+        products = products.filter(name__icontains=search_query)  # فیلتر براساس نام
+    if tag_filter:
+        products = products.filter(tag__name=tag_filter)  # فیلتر براساس برچسب
+
+    # دریافت تمامی تصاویر محصولات
+    images = ProductImages.objects.all()
+
     context = {
         'products': products,
-        'images': images  
+        'images': images,
+        'search_query': search_query,
+        'tag_filter': tag_filter,
     }
-    
-  
+
     return render(request, 'menu/menu.html', context)
-
-
 
 def product_detail(request,id):
     product = get_object_or_404(ProductsModel, id=id)
