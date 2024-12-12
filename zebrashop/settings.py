@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from decouple import config
 import django_heroku
 
-
 django_heroku.settings(locals())
 
 # بارگذاری متغیرهای محیطی از فایل .env
@@ -15,7 +14,7 @@ load_dotenv()
 django_heroku.settings(locals())
 
 # مسیر اصلی پروژه
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # امنیت
 SECRET_KEY = config('SECRET_KEY', default='&z8!d9b1$u7t^k3@p5g#l1x2q4%f6*r9w+y7z0m!a8p3h2l!q6')
