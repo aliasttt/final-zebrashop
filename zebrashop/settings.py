@@ -1,31 +1,20 @@
 from pathlib import Path
-import os
 import dj_database_url
 from dotenv import load_dotenv
 from decouple import config
 import django_heroku
 
-django_heroku.settings(locals())
-
-# بارگذاری متغیرهای محیطی از فایل .env
+# بارگذاری متغیرهای محیطی
 load_dotenv()
 
-# فعال‌سازی تنظیمات Heroku
-django_heroku.settings(locals())
-
 # مسیر اصلی پروژه
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # امنیت
 SECRET_KEY = config('SECRET_KEY', default='&z8!d9b1$u7t^k3@p5g#l1x2q4%f6*r9w+y7z0m!a8p3h2l!q6')
-DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'zebrashop.com.tr',
-    '185.208.181.154',
-]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
 
 # اپلیکیشن‌ها
 INSTALLED_APPS = [
@@ -54,9 +43,9 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-# پیکربندی پایگاه داده (Heroku)
+# پیکربندی پایگاه داده
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
 
 # پیکربندی استاتیک
@@ -137,16 +126,17 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 1209600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-# تنظیمات امنیتی
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
+# تنظیمات امنیتی (فقط در حالت تولید)
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
 
 # محدودیت‌های آدرس‌های ناموفق ورود
 AXES_FAILURE_LIMIT = 5
@@ -169,3 +159,6 @@ LOGGING = {
         },
     },
 }
+
+# فعال‌سازی تنظیمات Heroku
+django_heroku.settings(locals())
