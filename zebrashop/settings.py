@@ -44,6 +44,11 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+ROOT_URLCONF = 'zebrashop.urls'
+
+
+
 DATABASES = {  
                            'default': {
                                'ENGINE': 'django.db.backends.sqlite3',
@@ -171,4 +176,3 @@ LOGGING = {
 django_heroku.settings(locals())
 
 
-ROOT_URLCONF = 'zebrashop.urls'
