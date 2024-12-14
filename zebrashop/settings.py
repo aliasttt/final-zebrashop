@@ -22,11 +22,12 @@ SECRET_KEY = config('SECRET_KEY',default = '&z8!d9b1$u7t^k3@p5g#l1x2q4%f6*r9w+y7
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'zebrashop.com.tr',
-    '185.208.181.154',
-    "https://zebrashop-8cdbaa3beea7.herokuapp.com",
+    # '127.0.0.1',
+    # 'localhost',
+    # 'zebrashop.com.tr',
+    # '185.208.181.154',
+    # "https://zebrashop-8cdbaa3beea7.herokuapp.com",
+    '*',
 ]
 
 
