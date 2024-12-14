@@ -169,3 +169,6 @@ LOGGING = {
 
 # فعال‌سازی تنظیمات Heroku
 django_heroku.settings(locals())
+
+
+ROOT_URLCONF = 'zebrashop.urls'
