@@ -26,6 +26,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'zebrashop.com.tr',
     '185.208.181.154',
+    "https://zebrashop-8cdbaa3beea7.herokuapp.com",
 ]
 
 
