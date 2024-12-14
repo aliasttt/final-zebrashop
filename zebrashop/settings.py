@@ -3,6 +3,7 @@ import dj_database_url
 from dotenv import load_dotenv
 from decouple import config
 import django_heroku
+import os
 
 # بارگذاری متغیرهای محیطی
 load_dotenv()
@@ -43,10 +44,16 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-# پیکربندی پایگاه داده
-DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'))
-}
+DATABASES = {  
+                           'default': {
+                               'ENGINE': 'django.db.backends.sqlite3',
+                             'NAME': BASE_DIR / 'db.sqlite3',                 }
+                       }
+
+
+# DATABASES = {
+#                            'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))}
+
 
 # پیکربندی استاتیک
 STATIC_URL = '/static/'
