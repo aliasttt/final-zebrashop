@@ -2,8 +2,7 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
-
-
+from decouple import Config, Csv
 
 
 load_dotenv()
@@ -17,7 +16,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-$qkj2*yk9c)*f3z#yo1%b=5s%0p1sxt8qlsn-lhto9wmy)h(_)'
-SECRET_KEY =  '&z8!d9b1$u7t^k3@p5g#l1x2q4%f6*r9w+y7z0m!a8p3h2l!q6'
+config = Config()
+SECRET_KEY = config('SECRET_KEY', default='&z8!d9b1$u7t^k3@p5g#l1x2q4%f6*r9w+y7z0m!a8p3h2l!q6')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
